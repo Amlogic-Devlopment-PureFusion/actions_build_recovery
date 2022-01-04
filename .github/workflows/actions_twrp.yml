@@ -36,11 +36,11 @@ jobs:
   build:
     if: github.event.repository.owner.id == github.event.sender.id
     runs-on: ubuntu-18.04
-    
+
     steps:
     - name: Check Out
       uses: actions/checkout@main
-      
+
     - name: Prepare the environment
       run: |
         docker rmi `docker images -q`
@@ -51,19 +51,19 @@ jobs:
         sudo apt clean
         sudo apt update
         sudo apt -y install git-core gnupg flex bison gperf build-essential zip curl zlib1g-dev gcc-multilib g++-multilib libc6-dev-i386 lib32ncurses5-dev x11proto-core-dev libx11-dev tree lib32z-dev libgl1-mesa-dev libxml2-utils xsltproc unzip jq bc bison build-essential ccache curl flex g++-multilib gcc-multilib git gnupg gperf lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libssl-dev libwxgtk3.0-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev imagemagick libbz2-dev libssl-dev lzma ncftp bash-completion python openjdk-8-jdk qemu-user-static
-      
+
     - name: Set variables
       run: |
         echo "::set-output name=date::$(date +%F)"
       id: var
-      
+
     - name: Install repo
       run: |
         mkdir ~/bin
         curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
         chmod a+x ~/bin/repo
         export PATH=~/bin:$PATH
-      
+
     - name: Initialize repo
       run: |
         PATH=~/bin:$PATH
@@ -74,7 +74,7 @@ jobs:
         git config --global user.email "Android@teio.tk"
         repo init --depth=1 -u ${{ github.event.inputs.LIBRARY_URL }} -b ${{ github.event.inputs.LIBRARY_BRANCH }}
       id: pwd
-          
+
     - name: Repo Sync
       run: |
         PATH=~/bin:$PATH
@@ -85,7 +85,7 @@ jobs:
       run: |
         PATH=~/bin:$PATH
         cd ${{ steps.pwd.outputs.pwd }}
-        wget https://github.com/Xpsoted/actions_build_twrp/raw/master/device.zip
+        wget https://github.com/Amlogic-Devlopment-PureFusion/actions_build_recovery/raw/master/device.zip
         unzip device.zip
     - name: Building
       run: |
@@ -93,7 +93,7 @@ jobs:
         cd ${{ steps.pwd.outputs.pwd }}
         export ALLOW_MISSING_DEPENDENCIES=true
         source build/envsetup.sh
-        lunch ${{ github.event.inputs.LIBRARY_NAME }}_${{ github.event.inputs.DEVICE_NAME }}-eng 
+        lunch ${{ github.event.inputs.LIBRARY_NAME }}_${{ github.event.inputs.DEVICE_NAME }}-eng
         make clean
         make recoveryimage -j$(nproc --all)
 
