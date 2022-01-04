@@ -14,11 +14,11 @@ on:
       LIBRARY_BRANCH:
         description: 'LIBRARY_BRANCH'
         required: true
-        default: 'twrp-10.0-deprecated'
+        default: 'twrp-10.0'
       DEVICE_URL:
         description: 'DEVICE_URL'
         required: true
-        default: 'https://github.com/Amlogic-Devlopment-PureFusion/android_device_askey_adt3-TWRP'
+        default: 'https://github.com/Xpsoted/android_device_qualcomm_qrd855-TWRP'
       DEVICE_BRANCH:
         description: 'DEVICE_BRANCH'
         required: true
@@ -26,68 +26,64 @@ on:
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/askey/adt3'
+        default: 'device/qualcomm/msmnile'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'adt3'
+        default: 'LD_C15_TFT_LFLT'
+env:
+  TZ: America/New_York
 
-TZ: America/New_York
 jobs:
   build:
     runs-on: ubuntu-20.04
     steps:
     - name: Checkout
-        uses: actions/checkout@main
+      uses: actions/checkout@main
     - name: Show system
-        env:
+      env:
           DEBIAN_FRONTEND: noninteractive
-        run: |
-          echo -e "Total CPU cores\t: $(nproc)"
-          cat /proc/cpuinfo | grep 'model name'
-          free -h
-          uname -a
-          [ -f /proc/version ] && cat /proc/version
-          [ -f /etc/issue.net ] && cat /etc/issue.net
-          [ -f /etc/issue ] && cat /etc/issue
-          ulimit -a
+      run: |
+        echo -e "Total CPU cores\t: $(nproc)"
+        cat /proc/cpuinfo | grep 'model name'
+        free -h
+        uname -a
+        [ -f /proc/version ] && cat /proc/version
+        [ -f /etc/issue.net ] && cat /etc/issue.net
+        [ -f /etc/issue ] && cat /etc/issue
+        ulimit -a
     - name: Free disk space
-        run: |
-          docker rmi `docker images -q`
-          sudo -E swapoff -a
-          sudo -E rm -f /swapfile
-          sudo -E snap set system refresh.retain=2
-          sudo -E apt-get -qq purge azure* dotnet* firefox ghc* google* hhvm
-          llvm* mono* mysql* openjdk* php* zulu*
-          sudo -E apt-get -qq remove --purge powershell mysql* mssql-tools
-          msodbcsql17 android*
-          sudo -E apt-get -qq autoremove --purge
-          sudo -E apt-get clean -qq
-          sudo -E rm -rf /usr/share/dotnet /usr/local/lib/android/sdk /etc/mysql
-          /etc/php /usr/local/share/boost
-          sudo -E rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /etc/mysql
-          /etc/php /usr/local/lib/android /opt/ghc /swapfile
-          [ -n "$AGENT_TOOLSDIRECTORY" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
-          df -h
+      run: |
+        docker rmi `docker images -q`
+        sudo -E swapoff -a
+        sudo -E rm -f /swapfile
+        sudo -E snap set system refresh.retain=2
+        sudo -E apt-get -qq purge azure* dotnet* firefox ghc* google* hhvm llvm* mono* mysql* openjdk* php* zulu*
+        sudo -E apt-get -qq remove --purge powershell mysql* mssql-tools
+        msodbcsql17 android*
+        sudo -E apt-get -qq autoremove --purge
+        sudo -E apt-get clean -qq
+        sudo -E rm -rf /usr/share/dotnet /usr/local/lib/android/sdk /etc/mysql /etc/php /usr/local/share/boost
+        sudo -E rm -rf /etc/apt/sources.list.d/* /usr/share/dotnet /etc/mysql /etc/php /usr/local/lib/android /opt/ghc /swapfile
+        [ -n "$AGENT_TOOLSDIRECTORY" ] && sudo rm -rf "$AGENT_TOOLSDIRECTORY"
+        df -h
     - name: Initialization environment
       run: |
-          sudo -E apt-get update -qq
-          sudo -E apt-get -qq update
-          sudo -E apt-get -qq full-upgrade
-          sudo -E apt-get -qq install $(curl -fsSL bit.ly/depends-ubuntu-2004)
-          wget -qO - https://bit.ly/build-env-on-ubuntu-bionic | sed
-          's/python-/python3-/g' | /bin/bash
-          sudo -E apt-get clean -qq
-          for i in $(ls /usr/bin/*-8); do sudo -E ln -sf $i ${i%%-8*}; done
-          sudo -E ln -sf /usr/include/asm-generic /usr/include/asm
-          sudo timedatectl set-timezone "$TZ"
-          sudo mkdir -p /workdir
-          sudo chown $USER:$GROUPS /workdir
-    - name: Prepare the environment
-      run: |
-# ****Setup Linux to build Android****
-        sudo apt -y install build-essential ccache libncurses5 libssl-dev m4 unzip zip brotli bc bison curl flex g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev liblz4-tool libncurses5-dev libsdl1.2-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool squashfs-tools xsltproc zip zlib1g-dev adb fastboot python python3.8 abootimg
-        sudo apt -y install qemu-user-static openjdk-8-jdk bash-completion ncftp lzma libbz2-dev libwxgtk3.0-dev libc6-dev-i386 git-core
+        sudo -E apt-get update -qq
+        sudo -E apt-get -qq update
+        sudo -E apt-get -qq full-upgrade
+        sudo -E apt-get -qq install $(curl -fsSL bit.ly/depends-ubuntu-2004)
+        wget -qO - https://bit.ly/build-env-on-ubuntu-bionic | sed 's/python-/python3-/g' | /bin/bash
+        sudo -E apt-get -qq install build-essential ccache libncurses5 libssl-dev m4 unzip zip brotli bc bison curl flex
+        sudo -E apt-get -qq install g++-multilib gcc-multilib git gnupg gperf imagemagick lib32ncurses5-dev lib32readline-dev lib32z1-dev
+        sudo -E apt-get -qq install liblz4-tool libncurses5-dev libsdl1.2-dev libxml2 libxml2-utils lzop pngcrush rsync schedtool
+        sudo -E apt-get -qq install squashfs-tools xsltproc zip zlib1g-dev adb fastboot python python3.8 abootimg
+        sudo -E apt-get clean -qq
+        for i in $(ls /usr/bin/*-8); do sudo -E ln -sf $i ${i%%-8*}; done
+        sudo -E ln -sf /usr/include/asm-generic /usr/include/asm
+        sudo timedatectl set-timezone "$TZ"
+        sudo mkdir -p /workdir
+        sudo chown $USER:$GROUPS /workdir
 
     - name: Set variables
       run: |
@@ -122,7 +118,7 @@ jobs:
       run: |
         PATH=~/bin:$PATH
         cd ${{ steps.pwd.outputs.pwd }}
-        wget https://github.com/Amlogic-Devlopment-PureFusion/actions_build_recovery/raw/master/device.zip
+        wget https://github.com/Xpsoted/actions_build_twrp/raw/master/device.zip
         unzip device.zip
     - name: Building
       run: |
