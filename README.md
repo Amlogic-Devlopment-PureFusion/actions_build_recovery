@@ -1,55 +1,49 @@
-<h1 align="center"> 利用Github Actions编译REC</h1>
+# actions\_build\_recover, Custom Mods by Eliminater74
 
-<div align="center">
-	<a href="../..">
-		<img src="demo.jpg" title="Demo" />
-	</a>
-</div>
+![](demo.jpg)
 
 ---
 
-<p align="center">
-	A Github Action to build Recovery
-</p>
+A Github Action to build Recovery
 
-<div align="center">
-	<a href="../../actions">
-		<img src="../../workflows/rec-building/badge.svg" title="Building Status" />
-	</a>
-</div>
+![](../../workflows/rec-building/badge.svg)
 
-<br />
+  
+ 
 
-由于编译时间较长，建议把<code>[.github/workflows/actions_recovery.yml](.github/workflows/actions_recovery.yml)</code>末尾上传处的`${{ secrets.GITHUB_TOKEN }}`改成自己的[Personal Access Token](https://github.com/settings/tokens)
+Due to the long compilation time, it is recommended to change the [`.github/workflows/actions_recovery.yml`](https://github.com/Eliminater74/actions_build_recovery/blob/master/.github/workflows/actions_recovery.yml)upload at the end `${{ secrets.GITHUB_TOKEN }}`to your own [Personal Access Token](https://github.com/settings/tokens)
 
-注意保护自己的Personal Access Token，将它放入仓库[Settings](../../settings)里的[Secrets](../../settings/secrets)里后用`${{ secrets.YOUR_TOKEN_NAME }}`来替换`${{ secrets.GITHUB_TOKEN }}`
+To protect your Personal Access Token, put it in a warehouse [Settings](https://github.com/Eliminater74/actions_build_recovery/settings) in the [Secrets](https://github.com/Eliminater74/actions_build_recovery/settings/secrets) inside after use `${{ secrets.YOUR_TOKEN_NAME }}`to replace`${{ secrets.GITHUB_TOKEN }}`
 
-比如我的secret名字叫做work.则使用`${{ secrets.work }}`
+For example, my secret name is work. Then use`${{ secrets.work }}`
 
 ## 配置
 
-配置文件是[config.json](config.json)
+## **Configuration**
 
-| 名称               | 类型    | 描述                                                         |
-| ------------------ | ------- | ------------------------------------------------------------ |
-| `twrp_url`     | String  | Recovery Manifest地址                                        |
-| `twrp_branch`  | String  | Recovery Manifest分支                                        |
-| `git_username` | String  | 您使用Git的用户名                                            |
-| `git_email`    | String  | 您使用Git的邮箱<sub>（Github可使用`Github ID+Github用户名@users.noreply.github.com`）</sub> |
-| `use_own_dt`   | Boolean | 指示是否使用个人设备树<sub>（此项为`true`后以下三项起效）</sub>  |
-| `dt_url`           | String  | 您使用的设备树的地址<sub>（格式:`USER/REPO`）</sub>                |
-| `dt_branch`    | String  | 您使用的设备树的分支                                         |
-| `dt_remote`        | String  | 您使用设备树的存储库<sub>（如`github/gitlab`）</sub>               |
-| `dt_path`      | String  | 指示设备树本地保存位置<sub>（示例`device/huawei/kiwi`）</sub>      |
-| `device_code`  | String  | 您将要编译机型的机型代号                                     |
-| `fix_product`  | Boolean | 指示是否修复无法找到设备的问题                               |
-| `fix_branch`       | String  | 指示修复以上问题所使用的分支                                 |
-| `fix_misscom`  | Boolean | 指示是否修复缺少`device/qcom/common`的问题                   |
-| `fix_busybox`      | Boolean | 指示是否修复缺少`busybox`的问题                              |
+The configuration file is [config.json](https://github.com/Eliminater74/actions_build_recovery/blob/master/config.json)
 
-## 开始
+| **name** | **type** | **describe** |
+| --- | --- | --- |
+| `twrp_url` | String | Recovery Manifest address |
+| `twrp_branch` | String | Recovery Manifest branch |
+| `git_username` | String | Your username with Git |
+| `git_email` | String | Your Git mailbox (available on Github `Github ID+Github用户名@users.noreply.github.com`) |
+| `use_own_dt` | Boolean | Indicate whether to use the personal device tree (this item is `true`effective for the following three items) |
+| `dt_url` | String | Address of the device tree you use (format: `USER/REPO`) |
+| `dt_branch` | String | Branch of the device tree you use |
+| `dt_remote` | String | You use the repository of the device tree (as in `github/gitlab`) |
+| `dt_path` | String | Indicate the local save location of the device tree (example `device/huawei/kiwi`) |
+| `device_code` | String | The model code of the model you are about to compile |
+| `fix_product` | Boolean | Indicates whether to fix the problem that the device cannot be found |
+| `fix_branch` | String | Indicate the branch used to fix the above problem |
+| `fix_misscom` | Boolean | Indicates whether to fix missing `device/qcom/common`issues |
+| `fix_busybox` | Boolean | Indicates whether to fix missing `busybox`issues |
 
-Fork此仓库后，点击右上角Star就会开始
+## **Start**
 
-## 编译结果
-可以在[Release](../../releases)下载
+After Fork this warehouse, click on Star in the upper right corner to start
+
+## **Compilation result**
+
+Can be downloaded in [Release](https://github.com/Eliminater74/actions_build_recovery/releases)
