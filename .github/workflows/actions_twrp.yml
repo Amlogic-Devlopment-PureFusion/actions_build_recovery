@@ -32,6 +32,7 @@ on:
         required: true
         default: 'apt3'
 env:
+  WorkSpace: WorkSpace
   TZ: America/New_York
 
 jobs:
@@ -90,22 +91,19 @@ jobs:
         echo "::set-output name=date::$(date +%F)"
       id: var
 
-    - name: Install repo
+    - name: Sync recovery source
       run: |
-        mkdir ~/bin
-        curl https://storage.googleapis.com/git-repo-downloads/repo > ~/bin/repo
-        chmod a+x ~/bin/repo
-        export PATH=~/bin:$PATH
-
-    - name: Initialize repo
-      run: |
-        PATH=~/bin:$PATH
-        mkdir workspace
-        cd workspace
+        mkdir ${{env.WorkSpace}}
+        cd ${{env.WorkSpace}}
         echo "::set-output name=pwd::$(pwd)"
-        git config --global user.name "Hikaru's Action-Build-Bot"
-        git config --global user.email "Android@teio.tk"
-        repo init --depth=1 -u ${{ github.event.inputs.LIBRARY_URL }} -b ${{ github.event.inputs.LIBRARY_BRANCH }}
+        git config --global user.name "Eliminater74's Action-Build-Bot"
+        git config --global user.email "Android@purefusion.com"
+        echo "::group::Repo Init"
+        repo init -u ${{ github.event.inputs.LIBRARY_URL }} -b ${{ github.event.inputs.LIBRARY_BRANCH }} --depth=1 --groups=all,-notdefault,-device,-darwin,-x86,-mips
+        echo "::endgroup::"
+        echo "::group::Repo Sync"
+        repo sync -j4
+        echo "::endgroup::"
       id: pwd
 
     - name: Repo Sync
