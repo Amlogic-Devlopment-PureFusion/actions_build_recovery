@@ -35,8 +35,20 @@ on:
         description: "Disable crypto module"
         required: false
         default: "false"
+      Enable_cache:
+        description: "Enable caching"
+        required: true
+        default: "true"
 env:
   WorkSpace: WorkSpace
+  Rec_name: TWRP11
+  Rec_ver: 3.6.0
+  device: adt3
+  DT_path: device/askey/apt3
+  ProductFileHeader: twrp
+  target: recoveryimage
+  Author: ${{github.actor}}
+  Delete_old: false
   TZ: America/New_York
 
 jobs:
@@ -116,14 +128,33 @@ jobs:
         cd ${{env.WorkSpace}}
         git clone ${{ github.event.inputs.DEVICE_URL }} --depth=1 --single-branch ${{ github.event.inputs.DEVICE_PATH }}
 
-      - name: Disable Crypto
-        if: (github.event.inputs.crypto == 'true' && github.event.inputs.crypto  != 'false') || contains(github.event.action, 'crypto')
-        run: |
-          cd ${{env.WorkSpace}}/${{env.DT_path}}
-          sed -i 's/TW_INCLUDE_CRYPTO := true/TW_INCLUDE_CRYPTO := false/g' BoardConfig.mk
-          sed -i 's/TW_INCLUDE_CRYPTO_FBE := true/TW_INCLUDE_CRYPTO_FBE := false/g' BoardConfig.mk
-      - name: Show tree
-        run: tree -C -d -L 3
+    - name: Disable Crypto
+      if: (github.event.inputs.crypto == 'true' && github.event.inputs.crypto  != 'false') || contains(github.event.action, 'crypto')
+      run: |
+        cd ${{env.WorkSpace}}/${{env.DT_path}}
+        sed -i 's/TW_INCLUDE_CRYPTO := true/TW_INCLUDE_CRYPTO := false/g' BoardConfig.mk
+        sed -i 's/TW_INCLUDE_CRYPTO_FBE := true/TW_INCLUDE_CRYPTO_FBE := false/g' BoardConfig.mk
+    - name: Show tree
+      run: tree -C -d -L 3
+
+    - name: Restore cache
+      uses: actions/cache@v2
+      if: (github.event.inputs.Enable_cache == 'true' && github.event.inputs.Enable_cache  != 'false') || contains(github.event.action, 'Enable_cache')
+      with:
+        path: |
+          ~/.ccache
+          ${{env.WorkSpace}}/out
+          key: ${{runner.os}}-${{env.Rec_name}}-${{env.Rec_ver}}-${{env.device}}
+          restore-keys: |
+          ${{runner.os}}-${{env.Rec_name}}-${{env.Rec_ver}}-${{env.device}}
+
+    - name: Setup ccache
+      uses: alexjurkiewicz/setup-ccache@master
+      if: (github.event.inputs.Enable_cache == 'true' && github.event.inputs.Enable_cache  != 'false') || contains(github.event.action, 'Enable_cache')
+      with:
+        max-size: 5G
+        extra-config: |
+          keep_comments_cpp = true
 
     - name: Building
       run: |
