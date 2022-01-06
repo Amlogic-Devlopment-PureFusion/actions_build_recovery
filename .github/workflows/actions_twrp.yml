@@ -169,8 +169,8 @@ jobs:
         echo "::group::Set EnvPath"
         export ALLOW_MISSING_DEPENDENCIES=true
         echo "::endgroup::"
-        echo "::group::Lunch ${{env.ProductFileHeader}}_${{env.device}}-eng"
-        lunch ${{env.ProductFileHeader}}_${{env.device}}-eng
+        echo "::group::lunch ${{ github.event.inputs.LIBRARY_NAME }}_${{ github.event.inputs.DEVICE_NAME }}-eng"
+        lunch ${{ github.event.inputs.LIBRARY_NAME }}_${{ github.event.inputs.DEVICE_NAME }}-eng
         echo "::endgroup::"
         echo "::group::Sync"
         repo sync -j$(nproc --all)
