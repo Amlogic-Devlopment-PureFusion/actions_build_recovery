@@ -156,15 +156,35 @@ jobs:
         extra-config: |
           keep_comments_cpp = true
 
-    - name: Building
+    - name: Build ${{env.Rec_name}}
       run: |
-        PATH=~/bin:$PATH
-        cd ${{ steps.pwd.outputs.pwd }}
-        export ALLOW_MISSING_DEPENDENCIES=true
+        cd ${{env.WorkSpace}}
+        echo "::group::Run Envsetup.sh"
         source build/envsetup.sh
-        lunch ${{ github.event.inputs.LIBRARY_NAME }}_${{ github.event.inputs.DEVICE_NAME }}-eng
-        make clean
-        make recoveryimage -j$(nproc --all)
+        echo "::endgroup::"
+        echo "::group::Set EnvPath"
+        export ALLOW_MISSING_DEPENDENCIES=true
+        echo "::endgroup::"
+        echo "::group::Lunch ${{env.ProductFileHeader}}_${{env.device}}-eng"
+        lunch ${{env.ProductFileHeader}}_${{env.device}}-eng
+        echo "::endgroup::"
+        echo "::group::Sync"
+        repo sync -j$(nproc --all)
+        echo "::endgroup::"
+        echo "::group::Build ${{env.Rec_name}}"
+        mka ${{env.target}}
+        echo "::endgroup::"
+      shell: bash
+
+#    - name: Building
+#      run: |
+#        PATH=~/bin:$PATH
+#        cd ${{ steps.pwd.outputs.pwd }}
+#        PATHexport ALLOW_MISSING_DEPENDENCIES=true
+#        source build/envsetup.sh
+#        lunch ${{ github.event.inputs.LIBRARY_NAME }}_${{ github.event.inputs.DEVICE_NAME }}-eng
+#        make clean
+#        make recoveryimage -j$(nproc --all)
 
     - name: Upload to Release
       uses: softprops/action-gh-release@v1
