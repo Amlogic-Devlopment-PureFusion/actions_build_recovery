@@ -31,6 +31,10 @@ on:
         description: 'DEVICE_NAME'
         required: true
         default: 'apt3'
+      crypto:
+        description: "Disable crypto module"
+        required: false
+        default: "false"
 env:
   WorkSpace: WorkSpace
   TZ: America/New_York
@@ -111,6 +115,15 @@ jobs:
       run: |
         cd ${{env.WorkSpace}}
         git clone ${{ github.event.inputs.DEVICE_URL }} --depth=1 --single-branch ${{ github.event.inputs.DEVICE_PATH }}
+
+      - name: Disable Crypto
+        if: (github.event.inputs.crypto == 'true' && github.event.inputs.crypto  != 'false') || contains(github.event.action, 'crypto')
+        run: |
+          cd ${{env.WorkSpace}}/${{env.DT_path}}
+          sed -i 's/TW_INCLUDE_CRYPTO := true/TW_INCLUDE_CRYPTO := false/g' BoardConfig.mk
+          sed -i 's/TW_INCLUDE_CRYPTO_FBE := true/TW_INCLUDE_CRYPTO_FBE := false/g' BoardConfig.mk
+      - name: Show tree
+        run: tree -C -d -L 3
 
     - name: Building
       run: |
