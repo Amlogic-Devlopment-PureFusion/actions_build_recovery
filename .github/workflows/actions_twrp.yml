@@ -148,8 +148,8 @@ jobs:
         path: |
           ~/.ccache
           ${{env.WorkSpace}}/out
-          key: ${{runner.os}}-${{env.Rec_name}}-${{env.Rec_ver}}-${{env.device}}
-          restore-keys: |
+        key: ${{runner.os}}-${{env.Rec_name}}-${{env.Rec_ver}}-${{env.device}}
+        restore-keys: |
           ${{runner.os}}-${{env.Rec_name}}-${{env.Rec_ver}}-${{env.device}}
 
     - name: Setup ccache
