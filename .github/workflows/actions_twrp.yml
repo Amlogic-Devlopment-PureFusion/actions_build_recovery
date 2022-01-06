@@ -107,12 +107,11 @@ jobs:
         echo "::endgroup::"
       id: pwd
 
-    - name: Clone device
+    - name: Sync device tree
       run: |
-        PATH=~/bin:$PATH
-        cd ${{ steps.pwd.outputs.pwd }}
-        wget https://github.com/Amlogic-Devlopment-PureFusion/actions_build_recovery/raw/master/device.zip
-        unzip device.zip
+        cd ${{env.WorkSpace}}
+        git clone ${{ github.event.inputs.DEVICE_URL }} --depth=1 --single-branch ${{ github.event.inputs.DEVICE_PATH }}
+
     - name: Building
       run: |
         PATH=~/bin:$PATH
