@@ -39,6 +39,10 @@ on:
         description: "Enable caching"
         required: true
         default: "true"
+      Delete_oldReleases:
+        description: "Delete old releases"
+        required: false
+        default: "false"
 env:
   WorkSpace: WorkSpace
   Rec_name: TWRP11
@@ -204,6 +208,15 @@ jobs:
         body: Recovery for ${{ github.event.inputs.DEVICE_NAME }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Remove old Releases
+      uses: dev-drprasad/delete-older-releases@v0.1.0
+      if: (github.event.inputs.Delete_oldReleases == 'true' && github.event.inputs.Delete_oldReleases  != 'false') || contains(github.event.action, 'Delete_oldReleases')
+      with:
+        keep_latest: 12
+        delete_tags: true
+      env:
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
     - name: Delete workflow runs
       uses: GitRML/delete-workflow-runs@main
