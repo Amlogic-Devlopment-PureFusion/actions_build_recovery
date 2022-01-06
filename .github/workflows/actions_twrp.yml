@@ -130,7 +130,7 @@ jobs:
     - name: Sync device tree
       run: |
         cd ${{env.WorkSpace}}
-        git clone ${{ github.event.inputs.DEVICE_URL }} --depth=1 --single-branch ${{ github.event.inputs.DEVICE_PATH }}
+        git clone ${{ github.event.inputs.DEVICE_URL }} -b ${{ github.event.inputs.DEVICE_BRANCH }} --depth=1 --single-branch ${{ github.event.inputs.DEVICE_PATH }}
 
     - name: Disable Crypto
       if: (github.event.inputs.crypto == 'true' && github.event.inputs.crypto  != 'false') || contains(github.event.action, 'crypto')
