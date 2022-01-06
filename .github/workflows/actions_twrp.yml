@@ -98,19 +98,14 @@ jobs:
         echo "::set-output name=pwd::$(pwd)"
         git config --global user.name "Eliminater74's Action-Build-Bot"
         git config --global user.email "Android@purefusion.com"
+        PATH=~/bin:$PATH
         echo "::group::Repo Init"
         repo init -u ${{ github.event.inputs.LIBRARY_URL }} -b ${{ github.event.inputs.LIBRARY_BRANCH }} --depth=1 --groups=all,-notdefault,-device,-darwin,-x86,-mips
         echo "::endgroup::"
         echo "::group::Repo Sync"
-        repo sync -j4
+        repo sync -j$(nproc --all)
         echo "::endgroup::"
       id: pwd
-
-    - name: Repo Sync
-      run: |
-        PATH=~/bin:$PATH
-        cd workspace
-        repo sync -j$(nproc --all)
 
     - name: Clone device
       run: |
