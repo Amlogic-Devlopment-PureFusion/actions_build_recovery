@@ -204,3 +204,8 @@ jobs:
         body: Recovery for ${{ github.event.inputs.DEVICE_NAME }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete workflow runs
+      uses: GitRML/delete-workflow-runs@main
+      with:
+        keep_minimum_runs: 10
