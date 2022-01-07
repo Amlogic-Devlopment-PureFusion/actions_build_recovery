@@ -6,31 +6,31 @@ on:
       LIBRARY_NAME:
         description: 'LIBRARY_NAME'
         required: true
-        default: 'cm'
+        default: 'twrp'
       LIBRARY_URL:
         description: 'LIBRARY_URL'
         required: true
-        default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_lineageos.git'
+        default: 'https://github.com/minimal-manifest-twrp/platform_manifest_twrp_aosp.git'
       LIBRARY_BRANCH:
         description: 'LIBRARY_BRANCH'
         required: true
-        default: 'twrp-14.1'
+        default: 'twrp-11'
       DEVICE_URL:
         description: 'DEVICE_URL'
         required: true
-        default: 'https://github.com/Amlogic-Devlopment-PureFusion/android_device_askey_adt3-TWRP'
+        default: 'https://github.com/Amlogic-Devlopment-PureFusion/android_device_askey_sti6140d360_TWRP-AOSP.git'
       DEVICE_BRANCH:
         description: 'DEVICE_BRANCH'
         required: true
-        default: 'los_14.1'
+        default: 'main'
       DEVICE_PATH:
         description: 'DEVICE_PATH'
         required: true
-        default: 'device/askey/apt3'
+        default: 'device/askey/sti6140d360'
       DEVICE_NAME:
         description: 'DEVICE_NAME'
         required: true
-        default: 'apt3'
+        default: 'sti6140d360'
       crypto:
         description: "Disable crypto module"
         required: false
@@ -47,8 +47,8 @@ env:
   WorkSpace: WorkSpace
   Rec_name: TWRP11
   Rec_ver: 3.6.0
-  device: adt3
-  DT_path: device/askey/apt3
+  device: sti6140d360
+  DT_path: device/askey/sti6140d360
   ProductFileHeader: twrp
   target: recoveryimage
   Author: ${{github.actor}}
